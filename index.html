@@ -7,105 +7,88 @@
   <!-- [All your existing HTML content remains unchanged — hero, about, experience, education, etc.] -->
 
   <script>
-  // Footer year
-  (function(){
-    const yEl = document.getElementById('y');
-    if(yEl) yEl.textContent = new Date().getFullYear();
-  })();
+  (function runWhenReady(){
+    function main(){
 
-  // Smooth anchor scrolling
-  document.querySelectorAll('a[href^="#"]').forEach(a=>{
-    a.addEventListener('click', e=>{
-      const id=a.getAttribute('href');
-      if(id && id.length>1){ e.preventDefault(); document.querySelector(id)?.scrollIntoView({behavior:'smooth'}); }
-    });
-  });
+      // Footer year
+      (function(){
+        const yEl = document.getElementById('y');
+        if(yEl) yEl.textContent = new Date().getFullYear();
+      })();
 
-  // Theme toggle (persist + system default + a11y)
-  (function(){
-    const key='theme-pref';
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const applyTheme = (mode)=>{
-      document.documentElement.classList.toggle('light', mode==='light');
-      const btn = document.getElementById('themeToggle');
-      if(btn){
-        btn.setAttribute('aria-pressed', mode==='light');
-        btn.setAttribute('aria-label', mode==='light' ? 'Switch to dark theme' : 'Switch to light theme');
-        btn.textContent = mode==='light' ? '☾' : '☀︎';
-      }
-      localStorage.setItem(key, mode);
-    };
-    const stored = localStorage.getItem(key);
-    const initial = stored ? stored : (prefersDark ? 'dark' : 'light');
-    applyTheme(initial);
-    document.getElementById('themeToggle')?.addEventListener('click', ()=>{
-      const next = document.documentElement.classList.contains('light') ? 'dark' : 'light';
-      applyTheme(next);
-    });
-  })();
-
-  // Stats counter (supports decimals)
-  (function(){
-    const stats = document.querySelectorAll('.stat');
-    if(!('IntersectionObserver' in window)) return;
-    const statObserver = new IntersectionObserver((entries)=>{
-      entries.forEach(entry=>{
-        if(entry.isIntersecting){
-          const el = entry.target;
-          const target = parseFloat(el.getAttribute('data-target')) || 0;
-          const start = performance.now();
-          const duration = 1200;
-          function animate(now){
-            const p = Math.min((now - start)/duration, 1);
-            const value = target * p;
-            el.textContent = (target % 1 !== 0) ? value.toFixed(1) : Math.round(value).toString();
-            if(p < 1) requestAnimationFrame(animate);
-          }
-          requestAnimationFrame(animate);
-          el.classList.add('pulse');
-          statObserver.unobserve(el);
-        }
+      // Smooth anchor scrolling
+      document.querySelectorAll('a[href^="#"]').forEach(a=>{
+        a.addEventListener('click', e=>{
+          const id=a.getAttribute('href');
+          if(id && id.length>1){ e.preventDefault(); document.querySelector(id)?.scrollIntoView({behavior:'smooth'}); }
+        });
       });
-    },{threshold:.5});
-    stats.forEach((s,i)=>setTimeout(()=>statObserver.observe(s), i*120));
-  })();
 
-  // [your other JS sections unchanged — typewriter, highlights, timeline, education %, reveal observers, parallax, hero skills, scroll bar, etc.]
-
-  // Final checks
-  (function(){
-    try{
-      console.assert(document.querySelectorAll('#education .card.item').length >= 1, 'Education cards should exist');
-      console.assert(typeof IntersectionObserver === 'function', 'IntersectionObserver must be available');
-      console.assert(document.querySelectorAll('.edu-percent').length >= 1, 'Education % counters exist');
-      console.log('%cAnimations A, B, D activated', 'color:#d7c08a');
-    }catch(e){console.warn('Test warning:', e);}
-  })();
-
-  /* ------------- ✅ Added Fallback Animation Script ------------- */
-  // Small non-intrusive fallback: if IntersectionObserver or automatic reveals fail (e.g., on GitHub Pages),
-  // ensure visible animation classes are applied after load.
-  (function(){
-    try{
-      setTimeout(()=>{
-        const anyShown = document.querySelectorAll('.card.show, .project.show, .avatar.show, .timeline.show, section.show-underline').length > 0;
-        if(!anyShown){
-          document.querySelectorAll('.card, .item, .project, .avatar, h2, #about p, #about li').forEach(el=> el.classList.add('show'));
-          document.querySelectorAll('section').forEach(sec=> sec.classList.add('show-underline'));
-          document.querySelectorAll('#experience .timeline').forEach(tl=> tl.classList.add('show'));
-          const prog = document.querySelector('.edu-progress');
-          if(prog){
-            const bar = prog.querySelector('.edu-progress-bar');
-            const val = prog.querySelector('.edu-progress-val');
-            const target = parseInt(prog.getAttribute('data-target'),10) || 0;
-            bar.style.width = target + '%';
-            val.textContent = target + '%';
+      // Theme toggle (persist + system default + a11y)
+      (function(){
+        const key='theme-pref';
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const applyTheme = (mode)=>{
+          document.documentElement.classList.toggle('light', mode==='light');
+          const btn = document.getElementById('themeToggle');
+          if(btn){
+            btn.setAttribute('aria-pressed', mode==='light');
+            btn.setAttribute('aria-label', mode==='light' ? 'Switch to dark theme' : 'Switch to light theme');
+            btn.textContent = mode==='light' ? '☾' : '☀︎';
           }
-        }
-      }, 650);
-    }catch(e){console.warn('Fallback reveal script error', e);}
-  })();
-  /* -------------------------------------------------------------- */
-  </script>
-</body>
-</html>
+          localStorage.setItem(key, mode);
+        };
+        const stored = localStorage.getItem(key);
+        const initial = stored ? stored : (prefersDark ? 'dark' : 'light');
+        applyTheme(initial);
+        document.getElementById('themeToggle')?.addEventListener('click', ()=>{
+          const next = document.documentElement.classList.contains('light') ? 'dark' : 'light';
+          applyTheme(next);
+        });
+      })();
+
+      // Stats counter (supports decimals)
+      (function(){
+        const stats = document.querySelectorAll('.stat');
+        if(!('IntersectionObserver' in window)) return;
+        const statObserver = new IntersectionObserver((entries)=>{
+          entries.forEach(entry=>{
+            if(entry.isIntersecting){
+              const el = entry.target;
+              const target = parseFloat(el.getAttribute('data-target')) || 0;
+              const start = performance.now();
+              const duration = 1200;
+              function animate(now){
+                const p = Math.min((now - start)/duration, 1);
+                const value = target * p;
+                el.textContent = (target % 1 !== 0) ? value.toFixed(1) : Math.round(value).toString();
+                if(p < 1) requestAnimationFrame(animate);
+              }
+              requestAnimationFrame(animate);
+              el.classList.add('pulse');
+              statObserver.unobserve(el);
+            }
+          });
+        },{threshold:.5});
+        stats.forEach((s,i)=>setTimeout(()=>statObserver.observe(s), i*120));
+      })();
+
+      // [your other JS sections unchanged — typewriter, highlights, timeline, education %, reveal observers, parallax, hero skills, scroll bar, etc.]
+
+      // Final checks
+      (function(){
+        try{
+          console.assert(document.querySelectorAll('#education .card.item').length >= 1, 'Education cards should exist');
+          console.assert(typeof IntersectionObserver === 'function', 'IntersectionObserver must be available');
+          console.assert(document.querySelectorAll('.edu-percent').length >= 1, 'Education % counters exist');
+          console.log('%cAnimations A, B, D activated', 'color:#d7c08a');
+        }catch(e){console.warn('Test warning:', e);}
+      })();
+
+      /* ------------- ✅ Added Fallback Animation Script ------------- */
+      // Small non-intrusive fallback: if IntersectionObserver or automatic reveals fail (e.g., on GitHub Pages),
+      // ensure visible animation classes are applied after load.
+      (function(){
+        try{
+          setTimeout(()=>{
+            const anyShown = document.querySelectorAll('.card.show, .project.show, .avatar.show, .timeline.show, section.show
