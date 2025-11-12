@@ -91,4 +91,35 @@
       (function(){
         try{
           setTimeout(()=>{
-            const anyShown = document.querySelectorAll('.card.show, .project.show, .avatar.show, .timeline.show, section.show
+            const anyShown = document.querySelectorAll('.card.show, .project.show, .avatar.show, .timeline.show, section.show-underline').length > 0;
+            if(!anyShown){
+              document.querySelectorAll('.card, .item, .project, .avatar, h2, #about p, #about li').forEach(el=> el.classList.add('show'));
+              document.querySelectorAll('section').forEach(sec=> sec.classList.add('show-underline'));
+              document.querySelectorAll('#experience .timeline').forEach(tl=> tl.classList.add('show'));
+              const prog = document.querySelector('.edu-progress');
+              if(prog){
+                const bar = prog.querySelector('.edu-progress-bar');
+                const val = prog.querySelector('.edu-progress-val');
+                const target = parseInt(prog.getAttribute('data-target'),10) || 0;
+                bar.style.width = target + '%';
+                val.textContent = target + '%';
+              }
+            }
+          }, 650);
+        }catch(e){console.warn('Fallback reveal script error', e);}
+      })();
+      /* -------------------------------------------------------------- */
+
+    } // end main
+
+    // Ensure script runs after DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', main, {once: true});
+    } else {
+      // DOM already ready
+      main();
+    }
+  })();
+  </script>
+</body>
+</html>
